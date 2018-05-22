@@ -1,0 +1,36 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Public urls
+GET         /                                 controllers.MainController.index()
+GET         /login                            controllers.MainController.login()
+#GET         /jwt.html                         controllers.MainController.jwt()
+
+## URLs protected via Controller
+#GET         /form/index.html                  controllers.DefaultController.formIndex()
+#GET         /form/index.html.json             controllers.DefaultController.formIndexJson()
+#GET         /basicauth/index.html             controllers.DefaultController.basicauthIndex()
+#GET         /protected/index.html             controllers.DefaultController.protectedIndex()
+#GET         /protected/custom.html            controllers.DefaultController.protectedCustomIndex()
+#GET         /dba/index.html                   controllers.DefaultController.dbaIndex()
+#POST        /dba/index.html                   controllers.DefaultController.dbaIndex()
+#GET         /rest-jwt/index.html              controllers.DefaultController.restJwtIndex()
+#POST        /csrf/index.html                  controllers.DefaultController.csrfIndex()
+#
+## URLs protected via Filter
+#GET         /filter/form/index.html                  controllers.DefaultControllerWithFilter.formIndex()
+#GET         /filter/form/index.html.json             controllers.DefaultControllerWithFilter.formIndexJson()
+#GET         /filter/basicauth/index.html             controllers.DefaultControllerWithFilter.basicauthIndex()
+#GET         /filter/protected/index.html             controllers.DefaultControllerWithFilter.protectedIndex()
+#GET         /filter/protected/custom.html            controllers.DefaultControllerWithFilter.protectedCustomIndex()
+#GET         /filter/rest-jwt/index.html              controllers.DefaultControllerWithFilter.restJwtIndex()
+
+# Routes necessary for play-pac4j
+#GET         /callback                         @org.pac4j.play.CallbackController.callback()
+#POST        /callback                         @org.pac4j.play.CallbackController.callback()
+#GET         /logout                           @org.pac4j.play.LogoutController.logout()
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                       controllers.Assets.at(path="/public", file)
+#->          /webjars                            webjars.Routes

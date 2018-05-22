@@ -44,8 +44,8 @@ object Dependencies {
   val accord = "com.wix" %% "accord-core" % "0.6.1"
   val webjarsPlay = "org.webjars" %% "webjars-play" % "2.6.3"
   val webjarsJquery = "org.webjars" % "jquery" % "3.3.1"
-  val webjarsJqueryUI = "org.webjars" % "jquery-ui" % "1.12.1"
-  val webjarsBootstrap = "org.webjars" % "bootstrap" % "4.0.0-2"
+  val webjarsPopper =  "org.webjars" % "popper.js" % "1.14.1"
+  val webjarsBootstrap = "org.webjars" % "bootstrap" % "4.1.0"
 }
 
 object Libraries {
@@ -55,12 +55,13 @@ object Libraries {
     pac4jLdap,
     pac4jHttp,
     pac4jSql,
-    pac4jKerberos
+    pac4jKerberos,
+    pac4jJwt
   )
   val webjars = Seq(
     webjarsBootstrap,
     webjarsJquery,
-    webjarsJqueryUI,
+    webjarsPopper,
     webjarsPlay
   )
 }

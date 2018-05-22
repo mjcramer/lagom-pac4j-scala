@@ -1,0 +1,5 @@
+
+name=Name
+title=Title
+description=A sample login service for Lagom
+author=Michael Cramer <michael.cramer@lightbend.com>

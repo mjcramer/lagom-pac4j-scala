@@ -73,6 +73,7 @@ lazy val `web-gateway` = (project in file("web-gateway"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslServer,
+      ehcache,
       Dependencies.macwire,
       Dependencies.scalaTest,
 //      "org.ocpsoft.prettytime" % "prettytime" % "3.2.7.Final",
@@ -80,6 +81,8 @@ lazy val `web-gateway` = (project in file("web-gateway"))
 //      "org.webjars" % "foundation-icon-fonts" % "d596a3cfb3"
     )
       ++ Libraries.webjars
+      ++ Libraries.auth
+
 //    httpIngressPaths := Seq("/")
   )
 
@@ -114,3 +117,14 @@ lazy val `user-service` = (project in file("user-service"))
   )
   .settings(lagomForkedTestSettings: _*)
 
+
+//-server -Xms8g -Xmx8g -XX:MaxMetaspaceSize=3200m  -XX:+UseParNewGC
+//-XX:+UseConcMarkSweepGC -XX:MaxGCPauseMillis=1000
+//-XX:+DisableExplicitGC -XX:+PrintGCDetails
+//-XX:-UseAdaptiveSizePolicy -XX:SurvivorRatio=7 -XX:NewSize=5004m
+//  -XX:MaxNewSize=5004m -XX:MaxTenuringThreshold=12
+//-XX:CMSInitiatingOccupancyFraction=75
+//-XX:+UseCMSInitiatingOccupancyOnly -XX:+PrintFlagsFinal
+//-XX:+PrintGCDateStamps -XX:+PrintTenuringDistribution
+//-XX:+PrintGCCause -XX:+PrintAdaptiveSizePolicy
+//-XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=3 -XX:GCLogFileSize=200M
