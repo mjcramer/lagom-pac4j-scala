@@ -20,7 +20,9 @@ lagomUnmanagedServices in ThisBuild += ("ldap" -> "http://127.0.0.1:9200")
 
 // Common settings for all subprojects
 def commonSettings: Seq[Setting[_]] = Seq(
-  evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false)
+  evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false),
+  resolvers +=
+    "Shibboleth" at "https://build.shibboleth.net/nexus/content/repositories/releases"
 )
 
 //======================================================================================================================
@@ -72,9 +74,8 @@ lazy val `web-gateway` = (project in file("web-gateway"))
   .dependsOn(`user-api`)
   .settings(
     libraryDependencies ++= Seq(
-      lagomScaladslServer,
+//      lagomScaladslServer,
       ehcache,
-      cacheApi,
       guice,
       Dependencies.macwire,
       Dependencies.scalaTest
