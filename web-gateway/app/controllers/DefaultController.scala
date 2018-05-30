@@ -1,23 +1,5 @@
 package controllers
 
-import javax.inject.Inject
-import org.pac4j.core.context.Pac4jConstants
-import org.pac4j.core.context.session.SessionStore
-import org.pac4j.core.profile._
-import org.pac4j.core.util.CommonHelper
-import org.pac4j.http.client.indirect.FormClient
-import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
-import org.pac4j.jwt.profile.JwtGenerator
-import org.pac4j.play.PlayWebContext
-import org.pac4j.play.scala._
-import play.api.libs.json.Json
-import play.api.mvc._
-import play.api.Configuration
-import play.api.i18n.{I18nSupport, MessagesApi}
-
-import scala.collection.JavaConverters._
-import scala.concurrent.ExecutionContext
-
 //class DefaultController @Inject()(override val messagesApi: MessagesApi,
 //                                  override val controllerComponents: SecurityComponents,
 //                                  loginTemplate: views.html.login)

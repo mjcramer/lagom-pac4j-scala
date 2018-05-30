@@ -1,12 +1,22 @@
 package controllers
 
-//class DefaultControllerWithFilter @Inject()(override val messagesApi: MessagesApi,
-//                                            override val controllerComponents: SecurityComponents,
-//                                            loginTemplate: views.html.login)
-//  extends BaseController
-//    with Security[CommonProfile]
-//    with I18nSupport {
-//
+import org.pac4j.core.profile.{CommonProfile, ProfileManager}
+import org.pac4j.core.util.CommonHelper
+import org.pac4j.http.client.indirect.FormClient
+import org.pac4j.jwt.profile.JwtGenerator
+import org.pac4j.play.PlayWebContext
+import org.pac4j.play.scala.{Security, SecurityComponents}
+import play.api.libs.json.Json
+import javax.inject.Inject
+import org.pac4j.core.context.Pac4jConstants
+import org.pac4j.core.context.session.SessionStore
+import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
+import play.api.mvc._
+
+import scala.collection.JavaConverters._
+
+class ApplicationWithFilter @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
+
 //  private def getProfiles(implicit request: RequestHeader): List[CommonProfile] = {
 //    val webContext = new PlayWebContext(request, playSessionStore)
 //    val profileManager = new ProfileManager[CommonProfile](webContext)
@@ -18,6 +28,22 @@ package controllers
 //    val webContext = new PlayWebContext(request, playSessionStore)
 //    val csrfToken = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]].get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
 //    Ok(views.html.index(request.profiles, csrfToken, null))
+//  }
+//
+//  def facebookIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
+//  def facebookAdminIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
+//  def facebookCustomIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
+//  def twitterIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
 //  }
 //
 //  def protectedIndex = Action { implicit request =>
@@ -44,13 +70,29 @@ package controllers
 //    Ok(views.html.protectedIndex(getProfiles(request)))
 //  }
 //
+//  def dbaIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
+//  def casIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
+//  def samlIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
+//  def oidcIndex = Action { implicit request =>
+//    Ok(views.html.protectedIndex(getProfiles(request)))
+//  }
+//
 //  def restJwtIndex = Action { implicit request =>
 //    Ok(views.html.protectedIndex(getProfiles(request)))
 //  }
 //
 //  def loginForm = Action { implicit request =>
 //    val formClient = config.getClients.findClient("FormClient").asInstanceOf[FormClient]
-//    Ok(loginTemplate(formClient.getCallbackUrl))
+//    Ok(views.html.loginForm.render(formClient.getCallbackUrl))
 //  }
 //
 //  def jwt = Action { implicit request =>
@@ -62,4 +104,4 @@ package controllers
 //    }
 //    Ok(views.html.jwt.render(token))
 //  }
-//}
+}

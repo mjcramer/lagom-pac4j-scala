@@ -31,6 +31,14 @@ object Dependencies {
   val pac4jJwt = "org.pac4j" % "pac4j-jwt" % Versions.pac4j
   val pac4jSql = "org.pac4j" % "pac4j-sql" % Versions.pac4j
   val pac4jKerberos = "org.pac4j" % "pac4j-kerberos" % Versions.pac4j
+  val pac4jCas = "org.pac4j" % "pac4j-cas" % Versions.pac4j
+  val pac4jOpenId = "org.pac4j" % "pac4j-openid" % Versions.pac4j exclude("xml-apis" , "xml-apis")
+  val pac4jOAuth = "org.pac4j" % "pac4j-oauth" % Versions.pac4j
+  val pac4jSaml = "org.pac4j" % "pac4j-saml" % Versions.pac4j
+  val pac4jOidc = "org.pac4j" % "pac4j-oidc" % Versions.pac4j exclude("commons-io" , "commons-io")
+  val pac4jGae = "org.pac4j" % "pac4j-gae" % Versions.pac4j
+  val pac4jMongo = "org.pac4j" % "pac4j-mongo" % Versions.pac4j
+  val pac4jCouch = "org.pac4j" % "pac4j-couch" % Versions.pac4j
   val playSlick = "com.typesafe.play" %% "play-slick" % Versions.playSlick
   val playAuth = "jp.t2v" %% "play2-auth" % Versions.playAuth
   val playAuthTest = "jp.t2v" %% "play2-auth-test" % Versions.playAuth % "test"
@@ -56,7 +64,11 @@ object Libraries {
     pac4jHttp,
     pac4jSql,
     pac4jKerberos,
-    pac4jJwt
+    pac4jJwt,
+    pac4jOAuth,
+    pac4jSaml,
+    pac4jCas,
+    pac4jOidc
   )
   val webjars = Seq(
     webjarsBootstrap,
