@@ -1,9 +1,11 @@
 
 @import org.webjars.play.WebJarsUtil
+@import org.pac4j.core.profile.CommonProfile
 
-@()(implicit request: RequestHeader, webjars: WebJarsUtil)
+@(title: String, profiles: List[CommonProfile], csrfToken: String, sessionId: String)(content: Html)
+    (implicit request: RequestHeader, webjars: WebJarsUtil)
 
-    @main("Index") {
+    @main(title, profiles, csrfToken, sessionId) {
         <div class="container">
             <h3 class="site-title">Restricted Content</h3>
             <div class="row">

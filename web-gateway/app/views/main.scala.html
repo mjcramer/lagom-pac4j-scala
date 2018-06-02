@@ -1,7 +1,9 @@
 
 @import org.webjars.play.WebJarsUtil
+@import org.pac4j.core.profile.CommonProfile
 
-@(title: String)(content: Html)(implicit request: RequestHeader, webjars: WebJarsUtil)
+@(title: String, profiles: List[CommonProfile], csrfToken: String, sessionId: String)(content: Html)
+ (implicit request: RequestHeader, webjars: WebJarsUtil)
 
 <!doctype html>
 <html lang="en">
@@ -50,7 +52,8 @@
 
         <footer class="footer">
             <div class="container">
-                <span class="text-muted">Place sticky footer content here.</span>
+                <span class="text-muted">CSRF Token: @csrfToken</span>
+                <span class="text-muted">Session ID: @sessionId</span>
             </div>
         </footer>
 

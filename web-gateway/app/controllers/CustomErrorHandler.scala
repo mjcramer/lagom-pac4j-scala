@@ -3,9 +3,10 @@ package controllers
 import play.api.Logger
 import play.api.http.HttpErrorHandler
 import play.api.mvc.RequestHeader
-import play.api.mvc.Results._
 
 import scala.concurrent.Future
+
+import play.api.mvc.Results._
 
 class CustomErrorHandler extends HttpErrorHandler {
 
@@ -19,7 +20,7 @@ class CustomErrorHandler extends HttpErrorHandler {
 
   def onServerError(request: RequestHeader, exception: Throwable) = {
     Future.successful {
-      log.error("Error occurrred", exception)
+      log.error("A server error occurred", exception)
       InternalServerError(views.html.error500())
     }
   }

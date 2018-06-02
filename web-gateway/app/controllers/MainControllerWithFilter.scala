@@ -15,15 +15,15 @@ import play.api.mvc._
 
 import scala.collection.JavaConverters._
 
-class ApplicationWithFilter @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
+class MainControllerWithFilter @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
 
-//  private def getProfiles(implicit request: RequestHeader): List[CommonProfile] = {
-//    val webContext = new PlayWebContext(request, playSessionStore)
-//    val profileManager = new ProfileManager[CommonProfile](webContext)
-//    val profiles = profileManager.getAll(true)
-//    asScalaBuffer(profiles).toList
-//  }
-//
+  private def getProfiles(implicit request: RequestHeader): List[CommonProfile] = {
+    val webContext = new PlayWebContext(request, playSessionStore)
+    val profileManager = new ProfileManager[CommonProfile](webContext)
+    val profiles = profileManager.getAll(true)
+    asScalaBuffer(profiles).toList
+  }
+
 //  def index = Secure("AnonymousClient", "csrfToken") { request =>
 //    val webContext = new PlayWebContext(request, playSessionStore)
 //    val csrfToken = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]].get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
@@ -31,68 +31,68 @@ class ApplicationWithFilter @Inject() (val controllerComponents: SecurityCompone
 //  }
 //
 //  def facebookIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def facebookAdminIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def facebookCustomIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def twitterIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def protectedIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def protectedCustomIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def formIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  // Setting the isAjax parameter is no longer necessary as AJAX requests are automatically detected:
 //  // a 401 error response will be returned instead of a redirection to the login url.
 //  def formIndexJson = Action { implicit request =>
-//    val content = views.html.protectedIndex.render(getProfiles(request))
+//    val content = views.html.restricted.render(getProfiles(request))
 //    val json = Json.obj("content" -> content.toString())
 //    Ok(json).as("application/json")
 //  }
 //
 //  def basicauthIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def dbaIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def casIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def samlIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def oidcIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def restJwtIndex = Action { implicit request =>
-//    Ok(views.html.protectedIndex(getProfiles(request)))
+//    Ok(views.html.restricted(getProfiles(request)))
 //  }
 //
 //  def loginForm = Action { implicit request =>
 //    val formClient = config.getClients.findClient("FormClient").asInstanceOf[FormClient]
-//    Ok(views.html.loginForm.render(formClient.getCallbackUrl))
+//    Ok(views.html.login.render(formClient.getCallbackUrl))
 //  }
 //
 //  def jwt = Action { implicit request =>

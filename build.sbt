@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 organization in ThisBuild := "com.example"
 
 // The Scala version that will be used for cross-compiled libraries
-scalaVersion in ThisBuild := "2.12.4"
+scalaVersion in ThisBuild := Version.scala
 
 // ------------------------------------------------------------------------------------------------
 // External service configuration (for development environment)
@@ -21,8 +21,10 @@ lagomUnmanagedServices in ThisBuild += ("ldap" -> "http://127.0.0.1:9200")
 // Common settings for all subprojects
 def commonSettings: Seq[Setting[_]] = Seq(
   evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false),
-  resolvers +=
-    "Shibboleth" at "https://build.shibboleth.net/nexus/content/repositories/releases"
+  resolvers ++= Seq(Resolver.mavenLocal,
+    "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases",
+    "Sonatype snapshots repository" at "https://oss.sonatype.org/content/repositories/snapshots/",
+    "Shibboleth releases" at "https://build.shibboleth.net/nexus/content/repositories/releases/")
 )
 
 //======================================================================================================================
@@ -50,7 +52,7 @@ lazy val security = (project in file("security"))
       lagomScaladslApi,
       lagomScaladslServer % Optional,
       //playJsonDerivedCodecs,
-      Dependencies.scalaTest
+      Dependency.scalaTest
     )
   )
 
@@ -63,8 +65,8 @@ lazy val common = (project in file("common"))
     libraryDependencies ++= Seq(
 //      lagomScaladslApi,
 //      lagomScaladslServer % Optional,
-      Dependencies.playJsonDerivedCodecs,
-      Dependencies.scalaTest
+      Dependency.playJsonDerivedCodecs,
+      Dependency.scalaTest
     )
   )
 
@@ -74,14 +76,12 @@ lazy val `web-gateway` = (project in file("web-gateway"))
   .dependsOn(`user-api`)
   .settings(
     libraryDependencies ++= Seq(
-//      lagomScaladslServer,
       ehcache,
-      guice,
-      Dependencies.macwire,
-      Dependencies.scalaTest
+      Dependency.macwire,
+      Dependency.scalaTest
     )
-      ++ Libraries.webjars
-      ++ Libraries.auth
+      ++ Library.webjars
+      ++ Library.auth
   )
 
 //======================================================================================================================
@@ -92,7 +92,7 @@ lazy val `user-api` = (project in file("user-api"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi,
-      Dependencies.playJsonDerivedCodecs
+      Dependency.playJsonDerivedCodecs
     )
   )
   .dependsOn(security)
@@ -108,9 +108,10 @@ lazy val `user-service` = (project in file("user-service"))
     libraryDependencies ++= Seq(
       lagomScaladslPersistenceCassandra,
       lagomScaladslTestKit,
-      Dependencies.macwire,
-      Dependencies.scalaTest,
-      Dependencies.jwt
+      Dependency.macwire,
+      Dependency.scalaTest
+//      Dependency.jwt
     )
   )
   .settings(lagomForkedTestSettings: _*)
+

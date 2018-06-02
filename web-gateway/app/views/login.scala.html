@@ -1,77 +1,61 @@
 
 @import org.webjars.play.WebJarsUtil
+@import org.pac4j.core.profile.CommonProfile
 
-@(formCallbackUrl: String)(implicit request: RequestHeader, webjars: WebJarsUtil)
+@(formCallbackUrl: String, profiles: List[CommonProfile], csrfToken: String, sessionId: String)(content: Html)
+ (implicit request: RequestHeader, webjars: WebJarsUtil)
 
-@main("Index") {
-    <div class="container">
-        <form class="form-horizontal" role="form" method="POST" action="@formCallbackUrl?client_name=FormClient">
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <h2>Please Login</h2>
-                    <hr>
-                </div>
+@main("Login", profiles, csrfToken, sessionId) {
+
+    <div id="login-overlay" class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Login to site.com</h4>
             </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <div class="form-group has-danger">
-                        <label class="sr-only" for="email">E-Mail Address</label>
-                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
-                            <input type="text" name="email" class="form-control" id="email"
-                                   placeholder="you@@example.com" required autofocus>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="well">
+                            <form id="loginForm" method="POST" action="@formCallbackUrl?client_name=FormClient" novalidate="novalidate">
+                                <div class="form-group">
+                                    <label for="username" class="control-label">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username" placeholder="example@gmail.com">
+                                    <span class="help-block"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="control-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
+                                    <span class="help-block"></span>
+                                </div>
+                                <div id="loginErrorMsg" class="alert alert-error hide">Wrong username og password</div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" id="remember"> Remember login
+                                    </label>
+                                    <p class="help-block">(if this is a private computer)</p>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block">Login</button>
+                                <a href="/forgot/" class="btn btn-default btn-block">Help to login</a>
+                            </form>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <i class="fa fa-close"></i> Example error message
-                        </span>
+                    <div class="col-xs-6">
+                        <p class="lead">Register now for <span class="text-success">FREE</span></p>
+                        <ul class="list-unstyled" style="line-height: 2">
+                            <li><span class="fa fa-check text-success"></span> See all your orders</li>
+                            <li><span class="fa fa-check text-success"></span> Fast re-order</li>
+                            <li><span class="fa fa-check text-success"></span> Save your favorites</li>
+                            <li><span class="fa fa-check text-success"></span> Fast checkout</li>
+                            <li><span class="fa fa-check text-success"></span> Get a gift <small>(only new customers)</small></li>
+                            <li><a href="/read-more/"><u>Read more</u></a></li>
+                        </ul>
+                        <p><a href="/new-customer/" class="btn btn-info btn-block">Yes please, register now!</a></p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="sr-only" for="password">Password</label>
-                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
-                            <input type="password" name="password" class="form-control" id="password"
-                                   placeholder="Password" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                        <!-- Put password error message here -->
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6" style="padding-top: .35rem">
-                    <div class="form-check mb-2 mr-sm-2 mb-sm-0">
-                        <label class="form-check-label">
-                            <input class="form-check-input" name="remember"
-                                   type="checkbox" >
-                            <span style="padding-bottom: .15rem">Remember me</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="row" style="padding-top: 1rem">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Login</button>
-                    <a class="btn btn-link" href="/password/reset">Forgot Your Password?</a>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 }
+
+
