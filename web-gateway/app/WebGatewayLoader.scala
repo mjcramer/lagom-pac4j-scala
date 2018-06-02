@@ -1,12 +1,11 @@
-import akka.routing.Router
 import com.example.lps.api.UserService
 import com.lightbend.lagom.scaladsl.api.{LagomConfigComponent, ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import com.lightbend.rp.servicediscovery.lagom.scaladsl.LagomServiceLocatorComponents
 import com.softwaremill.macwire._
-import controllers.{Application, AssetsComponents, CustomErrorHandler}
-import loader.{ControllersComponents, FiltersComponents, Pac4JComponents}
+import controllers.{MainController, AssetsComponents, CustomErrorHandler}
+import components.{ControllersComponents, FiltersComponents, Pac4JComponents}
 import org.pac4j.core.config.Config
 import org.pac4j.play.scala.{DefaultSecurityComponents, SecurityComponents}
 import org.pac4j.play.store.PlayCacheSessionStore
@@ -18,10 +17,12 @@ import play.api.http.HttpErrorHandler
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import play.api.mvc.BodyParsers
+import play.api.routing.Router
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, LoggerConfigurator, Mode}
 import play.cache.SyncCacheApiAdapter
 import play.filters.HttpFiltersComponents
 import router.Routes
+
 import scala.collection.immutable
 import scala.concurrent.ExecutionContext
 
@@ -32,7 +33,6 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   with FiltersComponents
   with AssetsComponents
   with I18nComponents
-  with HttpFiltersComponents
   with AhcWSComponents
   with LagomConfigComponent
   with LagomServiceClientComponents
@@ -67,7 +67,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
 
   lazy implicit val webjars = wire[WebJarsUtil]
-  lazy val main = wire[Application]
+  lazy val main = wire[MainController]
   lazy val userService = serviceClient.implement[UserService]
 }
 

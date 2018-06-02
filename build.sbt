@@ -5,28 +5,18 @@ import scala.concurrent.duration._
 // Top level package domain for this project
 organization in ThisBuild := "com.example"
 
-// The Scala version that will be used for cross-compiled libraries
-scalaVersion in ThisBuild := "2.12.4"
-
-// ------------------------------------------------------------------------------------------------
-// External service configuration (for development environment)
-// ------------------------------------------------------------------------------------------------
-lagomCassandraCleanOnStart in ThisBuild := false
-lagomCassandraMaxBootWaitingTime := (10 seconds)
-lagomUnmanagedServices in ThisBuild += ("ldap" -> "http://127.0.0.1:9200")
-
-//lagomCassandraMaxBootWaitingTime := 10
-
-
 // Common settings for all subprojects
 def commonSettings: Seq[Setting[_]] = Seq(
+  scalaVersion in ThisBuild := Version.scala,
   evictionWarningOptions in update := EvictionWarningOptions.default.withWarnTransitiveEvictions(false),
-  resolvers +=
-    "Shibboleth" at "https://build.shibboleth.net/nexus/content/repositories/releases"
+  resolvers ++= Seq(Resolver.mavenLocal,
+    "Scalaz Bintray" at "http://dl.bintray.com/scalaz/releases",
+    "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+    "Shibboleth Releases" at "https://build.shibboleth.net/nexus/content/repositories/releases/")
 )
 
 //======================================================================================================================
-// PARS (project root)
+// LAGOM-PAC4J-SCALA (project root)
 // ---------------------------------------------------------------------------------------------------------------------
 
 lazy val `lagom-pac4j-scala` = (project in file("."))
@@ -50,7 +40,7 @@ lazy val security = (project in file("security"))
       lagomScaladslApi,
       lagomScaladslServer % Optional,
       //playJsonDerivedCodecs,
-      Dependencies.scalaTest
+      Dependency.scalaTest
     )
   )
 
@@ -63,8 +53,8 @@ lazy val common = (project in file("common"))
     libraryDependencies ++= Seq(
 //      lagomScaladslApi,
 //      lagomScaladslServer % Optional,
-      Dependencies.playJsonDerivedCodecs,
-      Dependencies.scalaTest
+      Dependency.playJsonDerivedCodecs,
+      Dependency.scalaTest
     )
   )
 
@@ -74,14 +64,12 @@ lazy val `web-gateway` = (project in file("web-gateway"))
   .dependsOn(`user-api`)
   .settings(
     libraryDependencies ++= Seq(
-//      lagomScaladslServer,
       ehcache,
-      guice,
-      Dependencies.macwire,
-      Dependencies.scalaTest
+      Dependency.macwire,
+      Dependency.scalaTest
     )
-      ++ Libraries.webjars
-      ++ Libraries.auth
+      ++ Library.webjars
+      ++ Library.auth
   )
 
 //======================================================================================================================
@@ -92,7 +80,7 @@ lazy val `user-api` = (project in file("user-api"))
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslApi,
-      Dependencies.playJsonDerivedCodecs
+      Dependency.playJsonDerivedCodecs
     )
   )
   .dependsOn(security)
@@ -108,9 +96,23 @@ lazy val `user-service` = (project in file("user-service"))
     libraryDependencies ++= Seq(
       lagomScaladslPersistenceCassandra,
       lagomScaladslTestKit,
-      Dependencies.macwire,
-      Dependencies.scalaTest,
-      Dependencies.jwt
+      Dependency.macwire,
+      Dependency.scalaTest
+//      Dependency.jwt
     )
   )
   .settings(lagomForkedTestSettings: _*)
+
+// ------------------------------------------------------------------------------------------------
+// External service configuration (for development environment)
+// ------------------------------------------------------------------------------------------------
+lagomCassandraCleanOnStart in ThisBuild := false
+lagomCassandraMaxBootWaitingTime := (10 seconds)
+//lagomUnmanagedServices in ThisBuild += (
+//  "ldap" -> "http://127.0.0.1:9200",
+//  "postgresql" -> "http://127.0.0.1:5432"
+//)
+
+//lagomCassandraMaxBootWaitingTime := 10
+
+

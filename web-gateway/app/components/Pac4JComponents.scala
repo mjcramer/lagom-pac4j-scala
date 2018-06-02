@@ -1,4 +1,4 @@
-package loader
+package components
 
 import java.io.File
 
@@ -49,14 +49,14 @@ trait Pac4JComponents extends EhCacheComponents {
 
   lazy val scalaTemplateHelper: Pac4jScalaTemplateHelper[CommonProfile] = wire[Pac4jScalaTemplateHelper[CommonProfile]]
 
-  // callbackController and logoutController are created manually in
-  // the Guice module.
+  // callbackController and logoutController are created manually in the Guice module.
   lazy val callbackController: CallbackController = {
     val callbackController = new CallbackController()
     callbackController.setDefaultUrl("/?defaulturlafterlogout")
     callbackController.setMultiProfile(true)
     callbackController
   }
+
   // We need this provider because Play router generates controllers accepting providers
   lazy val callbackControllerProvider: Provider[CallbackController] = new Provider[CallbackController] {
     override def get(): CallbackController = callbackController
@@ -67,6 +67,7 @@ trait Pac4JComponents extends EhCacheComponents {
     logoutController.setDefaultUrl("/")
     logoutController
   }
+
   lazy val logoutControllerProvider: Provider[LogoutController] = new Provider[LogoutController] {
     override def get(): LogoutController = logoutController
   }
@@ -140,8 +141,8 @@ trait Pac4JComponents extends EhCacheComponents {
 
   lazy val directBasicAuthClient: DirectBasicAuthClient = wire[DirectBasicAuthClient]
 
-  lazy val pac4JConfig: Config = {
 
+  lazy val pac4JConfig: Config = {
     val baseUrl = configuration.get[String]("baseUrl")
 
     val clients = new Clients(baseUrl + "/callback", facebookClient, twitterClient, formClient,

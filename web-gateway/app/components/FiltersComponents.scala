@@ -1,4 +1,4 @@
-package loader
+package components
 
 import akka.stream.Materializer
 import org.pac4j.play.store.PlayCacheSessionStore
