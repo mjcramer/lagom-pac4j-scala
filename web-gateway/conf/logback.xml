@@ -15,8 +15,8 @@
   <!--logger name="play" level="INFO" /-->
   <logger name="application" level="DEBUG"/>
   <logger name="org.pac4j" level="DEBUG" />
-  <logger name="org.ldaptive" level="DEBUG" />
-  <logger name="org.ldaptive.pool" level="WARN" />
+  <logger name="org.pac4j.play" level="DEBUG" />
+  <logger name="org.pac4j.core.engine" level="DEBUG" />
 
   <root level="WARN">
     <appender-ref ref="STDOUT" />
