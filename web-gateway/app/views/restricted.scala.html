@@ -1,6 +1,32 @@
-@(profiles: List[org.pac4j.core.profile.CommonProfile])
 
-<h1>Restricted Area</h1>
-<a href="..">Back</a><br />
-<br /><br />
-profiles: @profiles<br />
+@import org.webjars.play.WebJarsUtil
+@import org.pac4j.core.profile.CommonProfile
+
+@(title: String)(content: Html)(implicit request: RequestHeader, webjars: WebJarsUtil)
+
+    @main(title) {
+        <div class="container">
+            <h3 class="site-title">Restricted Content</h3>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>Panel Content</h4>
+                                <p>You must have logged into this page</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Panel Content</h4>
+                            <p>Landing content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+

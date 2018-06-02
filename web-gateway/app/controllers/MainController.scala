@@ -15,10 +15,13 @@ import org.pac4j.cas.profile.CasProxyProfile
 import org.pac4j.core.context.Pac4jConstants
 import org.pac4j.core.context.session.SessionStore
 import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
+import org.webjars.play.WebJarsUtil
 
 import scala.collection.JavaConverters._
 
-class MainController @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
+class MainController @Inject() (val controllerComponents: SecurityComponents,
+                                val webjars: WebJarsUtil)
+  extends Security[CommonProfile] {
 
   private def getProfiles(implicit request: RequestHeader): List[CommonProfile] = {
     val webContext = new PlayWebContext(request, playSessionStore)
@@ -32,86 +35,37 @@ class MainController @Inject() (val controllerComponents: SecurityComponents) ex
     val sessionStore = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]]
     val sessionId = sessionStore.getOrCreateSessionId(webContext)
     val csrfToken = sessionStore.get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
-    Ok(views.html.index(profiles, csrfToken, sessionId))
+//    Ok(views.html.index("Index", profiles, csrfToken, sessionId))
+    Ok(views.html.index("Index"))
   }
 
   def csrfIndex = Secure("AnonymousClient", "csrfCheck") { implicit request =>
     Ok(views.html.csrf(profiles.asJava))
   }
 
-  // secured by filter
-  def facebookIndex = Action { implicit request =>
-    Ok(views.html.restricted(getProfiles(request)))
+  def restricted = Secure { implicit request =>
+    val webContext = new PlayWebContext(request, playSessionStore)
+    val sessionStore = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]]
+    val sessionId = sessionStore.getOrCreateSessionId(webContext)
+    val csrfToken = sessionStore.get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
+    Ok(views.html.restricted("Restricted"))
   }
 
-  def facebookAdminIndex = Secure("FacebookClient", "admin") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def facebookCustomIndex = Secure("FacebookClient", "custom") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def facebookNotProtectedIndex = Action { request =>
-    Ok(views.html.unrestricted(getProfiles(request)))
-  }
-
-  def twitterIndex = Secure("TwitterClient,FacebookClient") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def protectedIndex = Secure { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def protectedCustomIndex = Secure(authorizers="custom") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def formIndex = Secure("FormClient") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  // Setting the isAjax parameter is no longer necessary as AJAX requests are automatically detected:
-  // a 401 error response will be returned instead of a redirection to the login url.
-  def formIndexJson = Secure("FormClient") { implicit request =>
-    val content = views.html.restricted.render(profiles)
-    val json = Json.obj("content" -> content.toString())
-    Ok(json).as("application/json")
-  }
-
-  def basicauthIndex = Secure("IndirectBasicAuthClient") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def dbaIndex = Secure("DirectBasicAuthClient,ParameterClient") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def casIndex = Secure("CasClient") { implicit request =>
-    val profile = profiles.asJava.get(0)
-    val service = "http://localhost:8080/proxiedService"
-    var proxyTicket: String = null
-    if (profile.isInstanceOf[CasProxyProfile]) {
-      val proxyProfile = profile.asInstanceOf[CasProxyProfile]
-      proxyTicket = proxyProfile.getProxyTicketFor(service)
-    }
-    Ok(views.html.casProtectedIndex.render(profile, service, proxyTicket))
-    //Ok(views.html.protectedIndex(profiles))
-  }
-  
-  def samlIndex = Secure("SAML2Client") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  def oidcIndex = Secure("OidcClient") { implicit request =>
-    Ok(views.html.restricted(profiles))
-  }
-
-  // secured by filter
-  def restJwtIndex = Action { request =>
-    Ok(views.html.restricted(getProfiles(request)))
-  }
+//  def formIndex = Secure("FormClient") { implicit request =>
+//    Ok(views.html.restricted(profiles))
+//  }
+//
+//  // Setting the isAjax parameter is no longer necessary as AJAX requests are automatically detected:
+//  // a 401 error response will be returned instead of a redirection to the login url.
+//  def formIndexJson = Secure("FormClient") { implicit request =>
+//    val content = views.html.restricted.render(profiles)
+//    val json = Json.obj("content" -> content.toString())
+//    Ok(json).as("application/json")
+//  }
+//
+//  def basicauthIndex = Secure("IndirectBasicAuthClient") { implicit request =>
+//    Ok(views.html.restricted(profiles))
+//  }
 
   def loginForm = Action { request =>
     val formClient = config.getClients.findClient("FormClient").asInstanceOf[FormClient]
