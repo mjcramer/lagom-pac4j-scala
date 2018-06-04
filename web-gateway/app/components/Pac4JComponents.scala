@@ -72,81 +72,82 @@ trait Pac4JComponents extends EhCacheComponents {
     override def get(): LogoutController = logoutController
   }
 
-  // From here is where things got a little complicated because there are a lot of
-  // pac4j internal components. The good thing is that if something changes, Macwire
-  // will let us know.
-  lazy val facebookClient: FacebookClient = {
-    // configuration is provided by EhCacheComponents
-    val fbId = configuration.get[String]("fbId")
-    val fbSecret = configuration.get[String]("fbSecret")
-    new FacebookClient(fbId, fbSecret)
-  }
-
-  // The values were hardcoded in the Guice module, but of course they can be configured.
-  lazy val twitterClient: TwitterClient = new TwitterClient("HVSQGAw2XmiwcKOTvZFbQ", "FSiO9G9VRR4KCuksky0kgGuo8gAVndYymr4Nl7qc8AA")
-
-  // This was being created over and over, but with Macwire we can just wire it once
-  // and use later.
-  lazy val authenticator: Authenticator[UsernamePasswordCredentials] = wire[SimpleTestUsernamePasswordAuthenticator]
-
-  lazy val formClient: FormClient = {
-    val baseUrl = configuration.get[String]("baseUrl")
-    new FormClient(baseUrl + "/loginForm", authenticator)
-  }
-
-  lazy val indirectBasicAuthClient: IndirectBasicAuthClient = wire[IndirectBasicAuthClient]
-
-  lazy val casConfiguration: CasConfiguration = {
-    val casConfiguration = new CasConfiguration("https://casserverpac4j.herokuapp.com/login")
-    //val casConfiguration = new CasConfiguration("http://localhost:8888/cas/login")
-    casConfiguration.setProtocol(CasProtocol.CAS20)
-    casConfiguration
-  }
-
-  lazy val casClient: CasClient = wire[CasClient]
-
-  lazy val sAML2ClientConfiguration: SAML2ClientConfiguration = {
-    val cfg = new SAML2ClientConfiguration("resource:samlKeystore.jks", "pac4j-demo-passwd", "pac4j-demo-passwd", "resource:openidp-feide.xml")
-    cfg.setMaximumAuthenticationLifetime(3600)
-    cfg.setServiceProviderEntityId("urn:mace:saml:pac4j.org")
-
-    // It would be better to use Play's "environment" here, but let's keep things
-    // like the original example using Guice.
-    cfg.setServiceProviderMetadataPath(new File("target", "sp-metadata.xml").getAbsolutePath)
-    cfg
-  }
-  lazy val saml2Client: SAML2Client = wire[SAML2Client]
-
-  lazy val oidcClient: OidcClient[OidcProfile, OidcConfiguration] = {
-    val oidcConfiguration = new OidcConfiguration()
-
-    // More and more values that could be part of the configuration
-    oidcConfiguration.setClientId("343992089165-i1es0qvej18asl33mvlbeq750i3ko32k.apps.googleusercontent.com")
-    oidcConfiguration.setSecret("unXK_RSCbCXLTic2JACTiAo9")
-    oidcConfiguration.setDiscoveryURI("https://accounts.google.com/.well-known/openid-configuration")
-    oidcConfiguration.addCustomParam("prompt", "consent")
-    val oidcClient = new OidcClient[OidcProfile, OidcConfiguration](oidcConfiguration)
-    oidcClient.addAuthorizationGenerator(new RoleAdminAuthGenerator)
-    oidcClient
-  }
-
-  lazy val parameterClient: ParameterClient = {
-    val jwtAuthenticator = new JwtAuthenticator()
-    jwtAuthenticator.addSignatureConfiguration(new SecretSignatureConfiguration("12345678901234567890123456789012"))
-    val parameterClient = new ParameterClient("token", jwtAuthenticator)
-    parameterClient.setSupportGetRequest(true)
-    parameterClient.setSupportPostRequest(false)
-    parameterClient
-  }
-
-  lazy val directBasicAuthClient: DirectBasicAuthClient = wire[DirectBasicAuthClient]
+//  // From here is where things got a little complicated because there are a lot of
+//  // pac4j internal components. The good thing is that if something changes, Macwire
+//  // will let us know.
+//  lazy val facebookClient: FacebookClient = {
+//    // configuration is provided by EhCacheComponents
+//    val fbId = configuration.get[String]("fbId")
+//    val fbSecret = configuration.get[String]("fbSecret")
+//    new FacebookClient(fbId, fbSecret)
+//  }
+//
+//  // The values were hardcoded in the Guice module, but of course they can be configured.
+//  lazy val twitterClient: TwitterClient = new TwitterClient("HVSQGAw2XmiwcKOTvZFbQ", "FSiO9G9VRR4KCuksky0kgGuo8gAVndYymr4Nl7qc8AA")
+//
+//  // This was being created over and over, but with Macwire we can just wire it once
+//  // and use later.
+//  lazy val authenticator: Authenticator[UsernamePasswordCredentials] = wire[SimpleTestUsernamePasswordAuthenticator]
+//
+//  lazy val formClient: FormClient = {
+//    val baseUrl = configuration.get[String]("baseUrl")
+//    new FormClient(baseUrl + "/loginForm", authenticator)
+//  }
+//
+//  lazy val indirectBasicAuthClient: IndirectBasicAuthClient = wire[IndirectBasicAuthClient]
+//
+//  lazy val casConfiguration: CasConfiguration = {
+//    val casConfiguration = new CasConfiguration("https://casserverpac4j.herokuapp.com/login")
+//    //val casConfiguration = new CasConfiguration("http://localhost:8888/cas/login")
+//    casConfiguration.setProtocol(CasProtocol.CAS20)
+//    casConfiguration
+//  }
+//
+//  lazy val casClient: CasClient = wire[CasClient]
+//
+//  lazy val sAML2ClientConfiguration: SAML2ClientConfiguration = {
+//    val cfg = new SAML2ClientConfiguration("resource:samlKeystore.jks", "pac4j-demo-passwd", "pac4j-demo-passwd", "resource:openidp-feide.xml")
+//    cfg.setMaximumAuthenticationLifetime(3600)
+//    cfg.setServiceProviderEntityId("urn:mace:saml:pac4j.org")
+//
+//    // It would be better to use Play's "environment" here, but let's keep things
+//    // like the original example using Guice.
+//    cfg.setServiceProviderMetadataPath(new File("target", "sp-metadata.xml").getAbsolutePath)
+//    cfg
+//  }
+//  lazy val saml2Client: SAML2Client = wire[SAML2Client]
+//
+//  lazy val oidcClient: OidcClient[OidcProfile, OidcConfiguration] = {
+//    val oidcConfiguration = new OidcConfiguration()
+//
+//    // More and more values that could be part of the configuration
+//    oidcConfiguration.setClientId("343992089165-i1es0qvej18asl33mvlbeq750i3ko32k.apps.googleusercontent.com")
+//    oidcConfiguration.setSecret("unXK_RSCbCXLTic2JACTiAo9")
+//    oidcConfiguration.setDiscoveryURI("https://accounts.google.com/.well-known/openid-configuration")
+//    oidcConfiguration.addCustomParam("prompt", "consent")
+//    val oidcClient = new OidcClient[OidcProfile, OidcConfiguration](oidcConfiguration)
+//    oidcClient.addAuthorizationGenerator(new RoleAdminAuthGenerator)
+//    oidcClient
+//  }
+//
+//  lazy val parameterClient: ParameterClient = {
+//    val jwtAuthenticator = new JwtAuthenticator()
+//    jwtAuthenticator.addSignatureConfiguration(new SecretSignatureConfiguration("12345678901234567890123456789012"))
+//    val parameterClient = new ParameterClient("token", jwtAuthenticator)
+//    parameterClient.setSupportGetRequest(true)
+//    parameterClient.setSupportPostRequest(false)
+//    parameterClient
+//  }
+//
+//  lazy val directBasicAuthClient: DirectBasicAuthClient = wire[DirectBasicAuthClient]
 
 
   lazy val pac4JConfig: Config = {
     val baseUrl = configuration.get[String]("baseUrl")
 
-    val clients = new Clients(baseUrl + "/callback", facebookClient, twitterClient, formClient,
-      indirectBasicAuthClient, casClient, saml2Client, oidcClient, parameterClient, directBasicAuthClient,
+    val clients = new Clients(baseUrl + "/callback",
+//      facebookClient, twitterClient, formClient,
+//      indirectBasicAuthClient, casClient, saml2Client, oidcClient, parameterClient, directBasicAuthClient,
       new AnonymousClient())
 
     val config = new Config(clients)

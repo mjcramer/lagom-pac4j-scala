@@ -18,10 +18,12 @@ import org.pac4j.jwt.config.signature.SecretSignatureConfiguration
 import org.webjars.play.WebJarsUtil
 
 import scala.collection.JavaConverters._
+import scala.concurrent.ExecutionContext
 
-class MainController @Inject() (val controllerComponents: SecurityComponents,
-                                val webjars: WebJarsUtil)
+class MainController @Inject() (val controllerComponents: SecurityComponents)
+                               (implicit ec: ExecutionContext, webjars: WebJarsUtil)
   extends Security[CommonProfile] {
+
 
   private def getProfiles(implicit request: RequestHeader): List[CommonProfile] = {
     val webContext = new PlayWebContext(request, playSessionStore)
@@ -35,8 +37,7 @@ class MainController @Inject() (val controllerComponents: SecurityComponents,
     val sessionStore = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]]
     val sessionId = sessionStore.getOrCreateSessionId(webContext)
     val csrfToken = sessionStore.get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
-//    Ok(views.html.index("Index", profiles, csrfToken, sessionId))
-    Ok(views.html.index("Index"))
+    Ok(views.html.index(profiles, csrfToken, sessionId))
   }
 
   def csrfIndex = Secure("AnonymousClient", "csrfCheck") { implicit request =>
@@ -48,10 +49,16 @@ class MainController @Inject() (val controllerComponents: SecurityComponents,
     val sessionStore = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]]
     val sessionId = sessionStore.getOrCreateSessionId(webContext)
     val csrfToken = sessionStore.get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
-    Ok(views.html.restricted("Restricted"))
+    Ok(views.html.index(profiles, csrfToken, sessionId))
   }
 
-//  def formIndex = Secure("FormClient") { implicit request =>
+  def login = Action { implicit request =>
+    val formClient = config.getClients.findClient("FormClient").asInstanceOf[FormClient]
+    Ok(views.html.login(formClient.getCallbackUrl))
+  }
+
+
+  //  def formIndex = Secure("FormClient") { implicit request =>
 //    Ok(views.html.restricted(profiles))
 //  }
 //
@@ -67,24 +74,19 @@ class MainController @Inject() (val controllerComponents: SecurityComponents,
 //    Ok(views.html.restricted(profiles))
 //  }
 
-  def loginForm = Action { request =>
-    val formClient = config.getClients.findClient("FormClient").asInstanceOf[FormClient]
-    Ok(views.html.loginForm.render(formClient.getCallbackUrl))
-  }
-
-  def jwt = Action { request =>
-    val profiles = getProfiles(request)
-    val generator = new JwtGenerator[CommonProfile](new SecretSignatureConfiguration("12345678901234567890123456789012"))
-    var token: String = ""
-    if (CommonHelper.isNotEmpty(profiles.asJava)) {
-      token = generator.generate(profiles.asJava.get(0))
-    }
-    Ok(views.html.jwt.render(token))
-  }
-
-  def forceLogin = Action { request =>
-    val context: PlayWebContext = new PlayWebContext(request, playSessionStore)
-    val client = config.getClients.findClient(context.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER)).asInstanceOf[IndirectClient[Credentials,CommonProfile]]
-    Redirect(client.getRedirectAction(context).getLocation)
-  }
+//  def jwt = Action { request =>
+//    val profiles = getProfiles(request)
+//    val generator = new JwtGenerator[CommonProfile](new SecretSignatureConfiguration("12345678901234567890123456789012"))
+//    var token: String = ""
+//    if (CommonHelper.isNotEmpty(profiles.asJava)) {
+//      token = generator.generate(profiles.asJava.get(0))
+//    }
+//    Ok(views.html.jwt.render(token))
+//  }
+//
+//  def forceLogin = Action { request =>
+//    val context: PlayWebContext = new PlayWebContext(request, playSessionStore)
+//    val client = config.getClients.findClient(context.getRequestParameter(Pac4jConstants.DEFAULT_CLIENT_NAME_PARAMETER)).asInstanceOf[IndirectClient[Credentials,CommonProfile]]
+//    Redirect(client.getRedirectAction(context).getLocation)
+//  }
 }

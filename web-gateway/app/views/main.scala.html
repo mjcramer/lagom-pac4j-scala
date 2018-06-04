@@ -2,7 +2,7 @@
 @import org.webjars.play.WebJarsUtil
 @import org.pac4j.core.profile.CommonProfile
 
-@(title: String)(content: Html)(implicit request: RequestHeader, webjars: WebJarsUtil)
+@(title: String, profiles: Seq[CommonProfile], csrfToken: String, sessionId: String)(content: Html)(implicit request: RequestHeader, webjars: WebJarsUtil)
 
 <!doctype html>
 <html lang="en">
@@ -51,8 +51,10 @@
 
         <footer class="footer">
             <div class="container">
-                <span class="text-muted">CSRF Token: csrfToken</span>
-                <span class="text-muted">Session ID: sessionId</span>
+                <div class="row">
+                    <div class="span4 text-muted text-left">CSRF Token: @csrfToken</div>
+                    <div class="span4 text-muted text-right">Session ID: @sessionId</div>
+                </div>
             </div>
         </footer>
 

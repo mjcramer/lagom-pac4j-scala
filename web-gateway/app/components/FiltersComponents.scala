@@ -16,10 +16,9 @@ trait FiltersComponents {
   def configuration: Configuration
   def playSessionStore: PlayCacheSessionStore
   def pac4JConfig: Config
+
   implicit def executionContext: ExecutionContext
 
   lazy val securityFilter: SecurityFilter = wire[SecurityFilter]
-
   lazy val httpFilters: Seq[EssentialFilter] = Seq(securityFilter)
-
 }
