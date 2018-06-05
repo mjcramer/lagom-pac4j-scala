@@ -12,3 +12,7 @@ $doc.ajaxError(function (event, xhr) {
 		alert('Unexpected AJAX Error');
 	}
 });
+
+$('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+})

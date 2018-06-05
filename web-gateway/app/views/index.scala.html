@@ -1,10 +1,9 @@
 @import org.webjars.play.WebJarsUtil
 @import org.pac4j.core.profile.CommonProfile
 
-@(title: String, profiles: List[CommonProfile], csrfToken: String, sessionId: String)(content: Html)
-(implicit request: RequestHeader, webjars: WebJarsUtil)
+@(formLoginUrl: String, profiles: Seq[CommonProfile], csrfToken: String, sessionId: String)(implicit request: RequestHeader, webjars: WebJarsUtil)
 
-@main("Index", profiles, csrfToken, sessionId) {
+@main("Main", formLoginUrl, profiles, csrfToken, sessionId) {
     <div class="container">
         <h3 class="site-title">Globally Accessible Content</h3>
         <div class="row">

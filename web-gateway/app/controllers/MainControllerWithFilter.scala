@@ -17,13 +17,6 @@ import scala.collection.JavaConverters._
 
 class MainControllerWithFilter @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
 
-  private def getProfiles(implicit request: RequestHeader): List[CommonProfile] = {
-    val webContext = new PlayWebContext(request, playSessionStore)
-    val profileManager = new ProfileManager[CommonProfile](webContext)
-    val profiles = profileManager.getAll(true)
-    asScalaBuffer(profiles).toList
-  }
-
 //  def index = Secure("AnonymousClient", "csrfToken") { request =>
 //    val webContext = new PlayWebContext(request, playSessionStore)
 //    val csrfToken = webContext.getSessionStore().asInstanceOf[SessionStore[PlayWebContext]].get(webContext, Pac4jConstants.CSRF_TOKEN).asInstanceOf[String]
