@@ -30,6 +30,14 @@ import org.pac4j.play.store.{PlayCacheSessionStore, PlaySessionStore}
 import org.pac4j.saml.client.{SAML2Client, SAML2ClientConfiguration}
 import play.api.cache.ehcache.EhCacheComponents
 import play.cache.{AsyncCacheApi, DefaultAsyncCacheApi, DefaultSyncCacheApi, SyncCacheApi}
+import org.ldaptive.{ConnectionConfig, DefaultConnectionFactory}
+import org.ldaptive.auth.FormatDnResolver
+import org.ldaptive.auth.PooledBindAuthenticationHandler
+import org.ldaptive.pool.BlockingConnectionPool
+import org.ldaptive.pool.IdlePruneStrategy
+import org.ldaptive.pool.PoolConfig
+import org.ldaptive.pool.SearchValidator
+import org.pac4j.ldap.profile.service.LdapProfileService
 
 /**
  * Provides Pac4J components.
@@ -140,6 +148,43 @@ trait Pac4JComponents extends EhCacheComponents {
 //  }
 //
 //  lazy val directBasicAuthClient: DirectBasicAuthClient = wire[DirectBasicAuthClient]
+
+
+//  lazy val ldapProfileService = {
+//    val dnResolver = new FormatDnResolver
+//    dnResolver.setFormat(configuration.get[String]("ldap.CN ")+ "=%s," + configuration.get[String]("ldap..baseDN"))
+//    val connectionConfig = new ConnectionConfig()
+//    connectionConfig.setConnectTimeout(configuration.get500)
+//    connectionConfig.setResponseTimeout(1000)
+//    connectionConfig.setLdapUrl("ldap://localhost:" + LdapServer.PORT)
+//    val connectionFactory = new DefaultConnectionFactory
+//    connectionFactory.setConnectionConfig(connectionConfig)
+//    val poolConfig = new PoolConfig
+//    poolConfig.setMinPoolSize(1)
+//    poolConfig.setMaxPoolSize(2)
+//    poolConfig.setValidateOnCheckOut(true)
+//    poolConfig.setValidateOnCheckIn(true)
+//    poolConfig.setValidatePeriodically(false)
+//    val searchValidator = new SearchValidator
+//    val pruneStrategy = new IdlePruneStrategy
+//    val connectionPool = new BlockingConnectionPool
+//    connectionPool.setPoolConfig(poolConfig)
+//    connectionPool.setBlockWaitTime(1000)
+//    connectionPool.setValidator(searchValidator)
+//    connectionPool.setPruneStrategy(pruneStrategy)
+//    connectionPool.setConnectionFactory(connectionFactory)
+//    connectionPool.initialize()
+//    val pooledConnectionFactory = new Nothing
+//    pooledConnectionFactory.setConnectionPool(connectionPool)
+//    val handler = new PooledBindAuthenticationHandler
+//    handler.setConnectionFactory(pooledConnectionFactory)
+//    val ldaptiveAuthenticator = new Nothing
+//    ldaptiveAuthenticator.setDnResolver(dnResolver)
+//    ldaptiveAuthenticator.setAuthenticationHandler(handler)
+//    // pac4j:
+//    val ldapProfileService = new LdapProfileService(connectionFactory, ldaptiveAuthenticator)
+//  }
+
 
 
   lazy val pac4JConfig: Config = {
